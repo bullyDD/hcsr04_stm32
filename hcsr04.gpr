@@ -1,0 +1,38 @@
+with "config/hcsr04_config.gpr";
+with "config/stm32_config_config.gpr";
+
+project Hcsr04 is
+
+   for Languages use ("Ada");
+   for Target use "arm-eabi";
+   
+   case Stm32_Config_Config.Runtime is
+   	when "light_tasking" =>
+   	     for Runtime ("Ada") use "embedded-" & Stm32_Config_Config.Board;
+        when Others =>
+             for Runtime ("Ada") use Stm32_Config_Config.Runtime & "-" & Stm32_Config_Config.Board;
+   end case;
+   
+   for Source_Dirs use ("src/", "config/");
+   
+   for Object_Dir use "obj/" & Hcsr04_Config.Build_Profile;
+   
+   for Create_Missing_Dirs use "True";
+   
+   for Exec_Dir use "bin";
+   
+   for Main use ("test.adb");
+
+   package Compiler is
+      for Default_Switches ("Ada") use Hcsr04_Config.Ada_Compiler_Switches;
+   end Compiler;
+
+   package Binder is
+      for Switches ("Ada") use ("-Es"); --  Symbolic traceback
+   end Binder;
+
+   package Install is
+      for Artifacts (".") use ("share");
+   end Install;
+
+end Hcsr04;
