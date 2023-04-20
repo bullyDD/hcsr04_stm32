@@ -26,7 +26,7 @@ end Hcsr04;
 package body Hcsr04 is
   ...
 begin
-  HCSR04_New;
+  Initialize_Pins;
 end Hcsr04;
 ```
 
